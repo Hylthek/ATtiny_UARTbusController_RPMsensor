@@ -109,10 +109,10 @@ void loop() { // put your main code here, to run repeatedly:
   //zero stuffing----------------------------------------------------------------------------------------------
   else if (currMilliseconds - prevMilliseconds > stuffingCutoff) {
     //create send data array- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    unsigned long dataToSend[MAX_ARRAY_SIZE];
-    dataToSend[0] = currMilliseconds - setupTimeOffset;
-    dataToSend[1] = 0;
-    dataSend(dataToSend);
+    unsigned long zeroStuffingArray[MAX_ARRAY_SIZE];
+    zeroStuffingArray[0] = currMilliseconds - setupTimeOffset;
+    zeroStuffingArray[1] = 0;
+    dataSend(zeroStuffingArray);
     //update prevMilliseconds - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     prevMilliseconds = millis();
     return;
