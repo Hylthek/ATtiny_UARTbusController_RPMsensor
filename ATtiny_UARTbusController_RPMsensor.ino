@@ -59,10 +59,13 @@ void CUARTsetup() { // put your setup code here, to run once:
   //note: remember to set "ID" and "MAX_ARRAY_SIZE" correctly
   //note: remember to run "CUARTsetup" during "setup"
 
+
+unsigned int setupTimeOffset; //affects ONLY the number being sent out
 //setup function
 void setup() {
   CUARTsetup(); //<-- dont touch pls
   pinMode (pinSensor1, INPUT_PULLUP);
+  setupTimeOffset = millis();
 }
 
 //global vars
@@ -89,7 +92,7 @@ void loop() { // put your main code here, to run repeatedly:
       //create send array- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       if(newDataRun == false) {
         unsigned long RPM_Array[MAX_ARRAY_SIZE];
-        RPM_Array[0] = currMilliseconds; //total milliseconds
+        RPM_Array[0] = currMilliseconds - setupTimeOffset; //total milliseconds
         RPM_Array[1] = RPM;
         dataSend(RPM_Array);
         newDataRun = true;
@@ -107,7 +110,7 @@ void loop() { // put your main code here, to run repeatedly:
   else if (currMilliseconds - prevMilliseconds > stuffingCutoff) {
     //create send data array- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     unsigned long dataToSend[MAX_ARRAY_SIZE];
-    dataToSend[0] = currMilliseconds;
+    dataToSend[0] = currMilliseconds - setupTimeOffset;
     dataToSend[1] = 0;
     dataSend(dataToSend);
     //update prevMilliseconds - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
