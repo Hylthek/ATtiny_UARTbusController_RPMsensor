@@ -2,7 +2,7 @@
 //CUART "header file" (CUART stands for Calvin's UART hehe)===========================================================================================
 //CUART changeable variables
 const int ID = 1; //can be 1-10, device CANNOT have the same ID as another device on the bus
-const int MAX_ARRAY_SIZE = 2; //change if you need to send more than 10 variables (unlikely)
+const int MAX_ARRAY_SIZE = 1; //change if you need to send more than 10 variables (unlikely)
 
 //CUART variables (dont touch)
 const int pinTransmitFlag = 0; //bool output pin (LOW = read, HIGH = transmit) (also LED pin)
@@ -60,12 +60,10 @@ void CUARTsetup() { // put your setup code here, to run once:
   //note: remember to run "CUARTsetup" during "setup"
 
 
-unsigned int setupTimeOffset; //affects ONLY the number being sent out
 //setup function
 void setup() {
   CUARTsetup(); //<-- dont touch pls
   pinMode (pinSensor1, INPUT_PULLUP);
-  setupTimeOffset = millis();
 }
 
 //global vars
@@ -92,8 +90,7 @@ void loop() { // put your main code here, to run repeatedly:
       //create send array- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       if(newDataRun == false) {
         unsigned long RPM_Array[MAX_ARRAY_SIZE];
-        RPM_Array[0] = currMilliseconds - setupTimeOffset; //total milliseconds
-        RPM_Array[1] = RPM;
+        RPM_Array[0] = RPM;
         dataSend(RPM_Array);
         newDataRun = true;
       }
@@ -110,8 +107,7 @@ void loop() { // put your main code here, to run repeatedly:
   else if (currMilliseconds - prevMilliseconds > stuffingCutoff) {
     //create send data array- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     unsigned long zeroStuffingArray[MAX_ARRAY_SIZE];
-    zeroStuffingArray[0] = currMilliseconds - setupTimeOffset;
-    zeroStuffingArray[1] = 0;
+    zeroStuffingArray[0] = 0;
     dataSend(zeroStuffingArray);
     //update prevMilliseconds - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     prevMilliseconds = millis();
